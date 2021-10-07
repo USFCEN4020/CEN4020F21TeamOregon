@@ -17,8 +17,7 @@ def profileMenu(username):
     profileExists = False
     profileList = []
     userProfile = Profile(username, "", "", "", "")
-
-
+        
     profileFile = open("profile.txt", "r")
     for line in profileFile:
         if line != '\n':
@@ -37,8 +36,8 @@ def profileMenu(username):
         addProfileMajor(userProfile)
         addProfileUniversity(userProfile)
         addProfileParagraph(userProfile)
-        addExperience()
-        addEducation()
+        addExperience(username)
+        addEducation(username)
 
     if len(profileList) == 0 or not profileExists:
         profileList.append(userProfile)
@@ -77,6 +76,32 @@ def showProfile(userProfile):
         print("Major: " + userProfile.major)
         print("University: " + userProfile.university)
         print("About Me: " + userProfile.about)
+
+        print("Experience: ")     
+        experienceFile = open("profile_experience.txt", "r")
+        for line in experienceFile:
+            if line != '\n':
+                u, t, e, ds, de, l, d = line.split('\t')
+                if (u == user):
+                    print("Title: " + t)
+                    print("Employer: " + e)
+                    print("Date started: " + ds)
+                    print("Date ended: " + de)
+                    print("Location: " + l)
+                    print("Description: " + d)
+        experienceFile.close()
+
+        print("Education: ")
+        educationFile = open("profile_education.txt", "r")
+        for line in educationFile:
+            if line != '\n':
+                u, s, d, y= line.split('\t')
+                if (u == user):
+                    print("School name: " + s)
+                    print("Degree: " + d)
+                    print("Year entered: " + y)
+        educationFile.close()
+
         print("")
 
         print("")
@@ -100,9 +125,9 @@ def showProfile(userProfile):
         elif (cmd == '4'):
             addProfileParagraph(userProfile)
         elif (cmd == '5'):
-            addExperience()
+            addExperience(user)
         elif (cmd == '6'):
-            addEducation()
+            addEducation(user)
         elif (cmd == '0'):
             return
         else:
@@ -175,15 +200,17 @@ def addProfileParagraph(userProfile):
     return
 
 
-def addExperience():
+def addExperience(username):
     keep_add = "y"
-    decision = input("Would you like to enter experience in your profile? (y/n)")
+    decision = ""
+    decision = input("Would you like to enter experience in your profile? (y/n) ")
 
     if (decision == "y" or decision == "Y"):
-
+        
         while (keep_add == "y" or keep_add == "Y"):
-            if (has_max_experience):
+            if (has_max_experience()):
                 return
+            
             title = input("Enter the title for your job: ")
             employer = input("Enter the employer for your job: ")
             date_started = input("Enter the date you started the job: ")
@@ -191,7 +218,7 @@ def addExperience():
             location = input("Enter the location for your job: ")
             description = input("Enter the description of what you did: ")
 
-            saveExperience(title, employer, date_started, date_ended, location, description)
+            saveExperience(username, title, employer, date_started, date_ended, location, description)
 
             keep_add = input("Would you like to add more experience?(y/n)")
 
@@ -206,20 +233,23 @@ def addExperience():
 
 def has_max_experience():
     count = 0
-    for line in open("profile_experience.txt", "r"): count += 1
+    for line in open("profile_experience.txt", "r"):
+         if line != '\n':
+            u, t, e, ds, de, l, d = line.split('\t')
+            if(u == user):
+                count += 1
     if (count == 3):
         print("All permitted experiences have been entered.")
         return True
     return False
 
 
-def saveExperience(t, e, ds, de, l, d):
+def saveExperience(u, t, e, ds, de, l, d):
     file = open("profile_experience.txt", "a")
-    file.write(t + "\t" + e + "\t" + ds + "\t" + de + "\t" + l + "\t" + d + "\n")
+    file.write(u + "\t" + t + "\t" + e + "\t" + ds + "\t" + de + "\t" + l + "\t" + d + "\n")
     file.close()
 
-
-def addEducation():
+def addEducation(username):
     keep_add = "y"
 
     while (keep_add == "y" or keep_add == "Y"):
@@ -227,14 +257,14 @@ def addEducation():
         degree = input("Enter the degree: ")
         years_attended = input("Enter the year you attended: ")
 
-        saveEducation(school_name, degree, years_attended)
+        saveEducation(username, school_name, degree, years_attended)
 
         keep_add = input("Would you like to add more education?(y/n)")
 
     print("Education successfully added")
 
 
-def saveEducation(s, d, y):
+def saveEducation(u, s, d, y):
     file = open("profile_education.txt", "a")
-    file.write(s + "\t" + d + "\t" + y + "\n")
+    file.write(u + "\t" + s + "\t" + d + "\t" + y + "\n")
     file.close()

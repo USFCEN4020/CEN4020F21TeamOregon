@@ -1,21 +1,3 @@
-usf	cs	2021
-f	s	r
-f	e	s
-g	t	d
-f	r	c
-d	e	c
-d	e	v
-g		g
-w	r	d
-d	r	f
-t	h	d
-t	r	e
-usf	cse	2021
-t	r	t
-fd	d	
-	e	e
-d	d	d
-j	j	j
-d	d	d
-d	d	d
-i	i	i
+Student Learner	usf	cs	2018
+username	ucf	ce	2020
+Student Learner	ucf	cs	2022
