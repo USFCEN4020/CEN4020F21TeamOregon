@@ -1,3 +1,1 @@
 Student Learner	usf	cs	2018
-username	ucf	ce	2020
-Student Learner	ucf	cs	2022

@@ -10,14 +10,38 @@ class Profile:
         self.university = university
         self.about = about
 
+class Experience:
+    def __init__(self, username, title, employer, date_started, date_ended, location, description):
+        self.username = username
+        self.title = title
+        self.employer = employer
+        self.date_started = date_started
+        self.date_ended = date_ended
+        self.location = location
+        self.description = description
+
+    def __eq__(self, other):
+        return self.username == other.username and self.title == other.title and self.employer == other.employer
+
+class Education:
+    def __init__(self, username, school, degree, years):
+        self.username = username
+        self.school = school
+        self.degree = degree
+        self.years = years
+    def __eq__(self, other):
+        return self.username == other.username and self.school == other.school and self.degree == other.degree   
 
 def profileMenu(username):
-    global profileList, profileExists, user
+    global profileList, profileExists, user, experienceList, educationList
     user = username
     profileExists = False
     profileList = []
+    experienceList = []
+    educationList = []
     userProfile = Profile(username, "", "", "", "")
-        
+    
+
     profileFile = open("profile.txt", "r")
     for line in profileFile:
         if line != '\n':
@@ -28,6 +52,22 @@ def profileMenu(username):
                 userProfile = profile
                 profileExists = True
     profileFile.close()
+
+    experienceFile = open("profile_experience.txt", "r")
+    for line in experienceFile:
+        if line != '\n':
+            u, t, e, ds, de, l, d = line.split('\t')
+            exp = Experience(u, t, e, ds, de, l, d)
+            experienceList.append(exp)
+    experienceFile.close()
+
+    educationFile = open("profile_education.txt", "r")
+    for line in educationFile:
+        if line != '\n':
+            u, s, d, y = line.split('\t')
+            ed = Education(u, s, d, y)
+            educationList.append(ed)
+    educationFile.close()
 
     if profileExists:
         showProfile(userProfile)
@@ -56,15 +96,38 @@ def profileMenu(username):
                                profl.university + '\t' +
                                profl.about)
         profileFileWrite.close()
-
-    return
+       
 
 
 def showProfile(userProfile):
     cmd = ""
     while (cmd != '0'):
+        f = open('profile_experience.txt', 'r+')
+        f.truncate(0)
 
-        educationFile = open("profile_education.txt", 'r')
+        for expl in experienceList:
+            experienceFileWrite = open("profile_experience.txt", 'a')
+        
+            experienceFileWrite.write(expl.username + '\t' +
+                                    expl.title + '\t' +
+                                    expl.employer + '\t' +
+                                    expl.date_started + '\t' +
+                                    expl.date_ended + '\t' +
+                                    expl.location + '\t' +
+                                    expl.description)
+            experienceFileWrite.close()
+        
+        fn = open('profile_education.txt', 'r+')
+        fn.truncate(0)
+
+        for edl in educationList:
+            educationFileWrite = open("profile_education.txt", 'a')
+        
+            educationFileWrite.write(edl.username + '\t' +
+                                    edl.school + '\t' +
+                                    edl.degree + '\t' +
+                                    edl.years + '\n')
+            educationFileWrite.close()
         print("")
         print("--------------------")
         print("|    My Profile    |")
@@ -91,7 +154,7 @@ def showProfile(userProfile):
                     print("Description: " + d)
         experienceFile.close()
 
-        print("Education: ")
+        print("\nEducation: ")
         educationFile = open("profile_education.txt", "r")
         for line in educationFile:
             if line != '\n':
@@ -203,33 +266,68 @@ def addProfileParagraph(userProfile):
 def addExperience(username):
     keep_add = "y"
     decision = ""
-    decision = input("Would you like to enter experience in your profile? (y/n) ")
 
-    if (decision == "y" or decision == "Y"):
-        
-        while (keep_add == "y" or keep_add == "Y"):
+    while(keep_add == "y" or keep_add == "Y"):
+
+        decision = input("Would you like to add or replace experience?(add/replace) or enter 0 to not add any experience")
+
+        if (decision == "add" or decision == "Add"):
             if (has_max_experience()):
                 return
+                
+            title = input("Enter the title for your job to add: ")
+            employer = input("Enter the employer for your job to add: ")
+            date_started = input("Enter the date you started the job to add: ")
+            date_ended = input("Enter the date ended the job to add: ")
+            location = input("Enter the location for your job to add: ")
+            description = input("Enter the description of what you did to add: ")
+
+            add_experience = Experience(username, title, employer, date_started,date_ended,location,description)
+            experienceList.append(add_experience)
+
+            print("-Experience successfully added")
+
+            keep_add = input("Would you like to add or replace experience?(y/n)")
+
+        elif(decision == "replace" or decision == "Replace"):
+            delete_title = input("Enter the title for your job you would like to delete: ")
+            delete_employer = input("Enter the employer for your job you would like to delete: ")
+            delete_date_started = input("Enter the date you started the job you would like to delete: ")
+            delete_date_ended = input("Enter the date ended the job you would like to delete: ")
+            delete_location = input("Enter the location for your job you would like to delete: ")
+            delete_description = input("Enter the description of what you did you would like to delete: ")
+
+            delete_experience = Experience(username, delete_title, delete_employer, delete_date_started,delete_date_ended,delete_location,delete_description)
             
-            title = input("Enter the title for your job: ")
-            employer = input("Enter the employer for your job: ")
-            date_started = input("Enter the date you started the job: ")
-            date_ended = input("Enter the date ended the job: ")
-            location = input("Enter the location for your job: ")
-            description = input("Enter the description of what you did: ")
+            if delete_experience not in experienceList:
+                print("The experience entered is not in the list")
+                return
 
-            saveExperience(username, title, employer, date_started, date_ended, location, description)
+            experienceList.remove(delete_experience)
 
-            keep_add = input("Would you like to add more experience?(y/n)")
+            print("Experience successfully deleted\n")
 
-        print("Experience successfully added")
+            title = input("Enter the title for your job to add: ")
+            employer = input("Enter the employer for your job to add: ")
+            date_started = input("Enter the date you started the job to add: ")
+            date_ended = input("Enter the date ended the job to add: ")
+            location = input("Enter the location for your job to add: ")
+            description = input("Enter the description of what you did to add: ")
 
-    elif (decision == "n" or decision == "N"):
-        print("No experience ")
+            add_experience = Experience(username, title, employer, date_started,date_ended,location,description)
+            experienceList.append(add_experience)
+            
+            print("Experience successfully added")
 
-    else:
-        print("Invalid input please try again.")
+            keep_add = input("Would you like to add or replace experience?(y/n)")
+        
 
+        elif (decision == '0'):
+            print("No experience ")
+            return
+        else:
+            print("Invalid input")
+            return
 
 def has_max_experience():
     count = 0
@@ -244,27 +342,56 @@ def has_max_experience():
     return False
 
 
-def saveExperience(u, t, e, ds, de, l, d):
-    file = open("profile_experience.txt", "a")
-    file.write(u + "\t" + t + "\t" + e + "\t" + ds + "\t" + de + "\t" + l + "\t" + d + "\n")
-    file.close()
-
 def addEducation(username):
     keep_add = "y"
 
     while (keep_add == "y" or keep_add == "Y"):
-        school_name = input("Enter the name of the school: ")
-        degree = input("Enter the degree: ")
-        years_attended = input("Enter the year you attended: ")
+        decision = input("Would you like to add or replace ducation?(add/replace) or enter 0 to not add education: ")
 
-        saveEducation(username, school_name, degree, years_attended)
+        if (decision == "add" or decision == "Add"):
 
-        keep_add = input("Would you like to add more education?(y/n)")
+            school_name = input("Enter the name of the school to add: ")
+            degree = input("Enter the degree to add: ")
+            years_attended = input("Enter the year you attended to add: ")
 
-    print("Education successfully added")
+            add_education = Education(username, school_name, degree, years_attended)
+            educationList.append(add_education)
 
+            print("Education successfully added")
+            
+            keep_add = input("Would you like to add or replace more education?(y/n) ")
+        elif(decision == "replace" or decision == "Replace"):
+            delete_school_name = input("Enter the name of the school to delete: ")
+            delete_degree = input("Enter the degree to delete: ")
+            delete_years_attended = input("Enter the year you attended to delete: ")
+            delete_education = Education(username, delete_school_name, delete_degree, delete_years_attended)
+            
+            if delete_education not in educationList:
+                print("The education entered is not in the list")
+                return
 
-def saveEducation(u, s, d, y):
-    file = open("profile_education.txt", "a")
-    file.write(u + "\t" + s + "\t" + d + "\t" + y + "\n")
-    file.close()
+            educationList.remove(delete_education)
+            print("Education successfully deleted\n")
+            school_name = input("Enter the name of the school to add: ")
+            degree = input("Enter the degree to add: ")
+            years_attended = input("Enter the year you attended to add: ")
+
+            add_education = Education(username, school_name, degree, years_attended)
+            educationList.append(add_education)
+
+            print("Education successfully added")
+            keep_add = input("Would you like to add or replace more education?(y/n) ")
+        
+        else:
+            count=0
+            for edl in educationList:
+                if(edl.username == username):
+                    count+=1
+
+            if(count == 0):
+                print("You must enter at least 1 education")            
+            else:
+                return
+            
+
+            
