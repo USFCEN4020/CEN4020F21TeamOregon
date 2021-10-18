@@ -4,12 +4,16 @@
 from os import name
 import usefulLinks
 import profile
+import friend
+import friendList
 
 
 def mainPage(nameofuser):
     global name
     name = nameofuser
 
+    friend.has_pending_requests(nameofuser)
+    
     kbInput = '-1'
 
     while (kbInput != '0'):
@@ -25,6 +29,8 @@ def mainPage(nameofuser):
         print("| '3' for job search/ internship    |")
         print("| '4' for useful links              |")
         print("| '5' to go to your profile         |")
+        print("| '6' to show your network          |")
+        print("| '7' to show your friendList       |")
         print("| '0' to return to login            |")
         print("-------------------------------------")
         print("")
@@ -40,6 +46,10 @@ def mainPage(nameofuser):
             usefulLinks.menu()
         elif (kbInput == '5'):
             profile.profileMenu(name)
+        elif (kbInput == '6'):
+            friend.friendMenu(name)
+        elif (kbInput == '7'):
+            friendList.friendList1(name)
         elif (kbInput == '0'):
             return
         else:

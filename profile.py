@@ -94,14 +94,42 @@ def profileMenu(username):
                                profl.title + '\t' +
                                profl.major + '\t' +
                                profl.university + '\t' +
-                               profl.about)
+                               profl.about + '\n')
         profileFileWrite.close()
+    
+    f = open('profile_experience.txt', 'r+')
+    f.truncate(0)
+
+    for expl in experienceList:
+        experienceFileWrite = open("profile_experience.txt", 'a')
+        
+        experienceFileWrite.write(expl.username + '\t' +
+                                    expl.title + '\t' +
+                                    expl.employer + '\t' +
+                                    expl.date_started + '\t' +
+                                    expl.date_ended + '\t' +
+                                    expl.location + '\t' +
+                                    expl.description + '\n')
+        experienceFileWrite.close()
+        
+    fn = open('profile_education.txt', 'r+')
+    fn.truncate(0)
+
+    for edl in educationList:
+        educationFileWrite = open("profile_education.txt", 'a')
+        
+        educationFileWrite.write(edl.username + '\t' +
+                                    edl.school + '\t' +
+                                    edl.degree + '\t' +
+                                    edl.years + '\n')
+        educationFileWrite.close()
        
 
 
 def showProfile(userProfile):
     cmd = ""
     while (cmd != '0'):
+        #r+: r+ : Opens a file for reading and writing, placing the pointer at the beginning of the file
         f = open('profile_experience.txt', 'r+')
         f.truncate(0)
 
@@ -114,7 +142,7 @@ def showProfile(userProfile):
                                     expl.date_started + '\t' +
                                     expl.date_ended + '\t' +
                                     expl.location + '\t' +
-                                    expl.description)
+                                    expl.description )
             experienceFileWrite.close()
         
         fn = open('profile_education.txt', 'r+')
@@ -126,7 +154,7 @@ def showProfile(userProfile):
             educationFileWrite.write(edl.username + '\t' +
                                     edl.school + '\t' +
                                     edl.degree + '\t' +
-                                    edl.years + '\n')
+                                    edl.years)
             educationFileWrite.close()
         print("")
         print("--------------------")

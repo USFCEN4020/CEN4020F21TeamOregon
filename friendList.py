@@ -3,7 +3,6 @@ import profile as p1
 import profile
 from friend import Friend
 
-
 def showProfile1(userProfile):
     print("")
     print("-------------------------------------")
@@ -45,12 +44,6 @@ def showProfile1(userProfile):
     print("-------------------------------------")
 
 
-
-
-#from profile import showProfile
-#SHOW FRIEND LIST FUNCTION
-#login_name = username here hmm
-#what is the username though? 
 def friendList1(username):
     profileExists = False
 
@@ -62,117 +55,89 @@ def friendList1(username):
     print("| Friend List                       |")
     
     friendFile = open("friendList.txt", "r")
-    profileFile = open("profile.txt", "r")
-
+    
     for line in friendFile:
         if line != '\n':
             line = line.rstrip()
             u, fu = line.split('\t')
 
-            #print("u: " + u + ", fu: " + fu + "|")
             if (u == username or fu == username):
                 count_friend += 1
-                #user friend 
-                #friend user
-                #when 1st user name is the user
 
-                #when the username is the user
                 if(u == username):
                     #check if has profile: 
+                    profileFile = open("profile.txt", "r")
                     for line in profileFile:
                         if line != '\n':
-                            line = line.rstrip()
-                            u, t, n, m, p = line.split('\t')
-                            profile = Profile(u, t, n, m, p)
-                            #print("THe name : |" + profile.name + "|" )
-                            if (profile.name == fu):
-                                #print("there a profile exist")
+                            a, t, n, m, p = line.split('\t')
+                            profile = Profile(a, t, n, m, p)
+                            if (str(profile.name) == str(fu)):
                                 profileExists = True
                                 friendWithProfileCount +=1
 
-                    #profileFile.close()
+                    profileFile.close()
                     if(profileExists):
                         friendWithProfileMap[friendWithProfileCount] = {fu}
-                        print("Friend name: " + fu + ", "+ str(friendWithProfileCount) +"(has profile)")
-                    else: print("Friend name: " + fu)
-                    # else does not have 
-
-                #when the 2nd username is the user
+                        print("    Friend name: " + fu + ", "+ str(friendWithProfileCount) +"(has profile)")
+                    else: print("    Friend name: " + fu)
                 else:
                     #check if friend has profile
+                    profileFile = open("profile.txt", "r")
                     for line in profileFile:
                         if line != '\n':
-                            line = line.rstrip()
-                            u, t, n, m, p = line.split('\t')
-                            profile = Profile(u, t, n, m, p)
-                            if (profile.name == u):
+                            a, t, n, m, p = line.split('\t')
+                            profile = Profile(a, t, n, m, p)
+                            if (str(profile.name) == str(u)):
                                 friendWithProfileCount +=1
                                 profileExists = True
-                    #profileFile.close()
+                    profileFile.close()
                     if(profileExists):
                         friendWithProfileMap[friendWithProfileCount] = {u}
-                        print("Friend username: " + u  + ", "+ str(friendWithProfileCount) +"(has profile)")
-                    else: print("Friend username: " + u)
+                        print("    Friend name: " + u  + ", "+ str(friendWithProfileCount) +"(has profile)")
+                    else: print("    Friend name: " + u)
                 
         profileExists = False
 
-    #print("0 element in map: "+ str(friendWithProfileMap.get(0)).replace("{","").replace("}", "").replace("'",""))
 
-    #print(str(d).replace("{","").replace("}", ""))
-
-     
-    #print("friend: " + str(count_friend))
-
-    #print()
     if(count_friend == -1):
         print("| No friend to show                 |")
         print("-------------------------------------")
-        profileFile.close()
         friendFile.close() 
     else:
-        #optionInput = input("Do you want to view friends' profile(yes/no): ")
-        #if optionInput == "yes":
-
-        #print("this is the length: "+ str(len(friendWithProfileMap)))
-
         profileInputSelect = "0"
         
         while( profileInputSelect !=  "-1"):
 
-            profileInputSelect = input("| Enter the coresspond number next to the has profile to see the profile "
+            profileInputSelect = input("| Enter the coresspond number next to the has profile to see friend profile "
                             + "or enter -1 to exit|")
 
             profileInputSelect = showProfileOptions_InputValidate1(profileInputSelect)
 
-            #while int(profileInputSelect) > len(friendWithProfileMap):
-            #if not friendWithProfileMap.has_key(int(profileInputSelect)):
-            #while int(profileInputSelect) not in friendWithProfileMap or profileInputSelect != -1:
             if profileInputSelect in friendWithProfileMap:
                 profileInputSelect = input("Please put an integer corespond to a has profile selection")
                 print("Current profile input: " + profileInputSelect)
-              
-            #print()
-
-            #selected a number in the range 
             elif profileInputSelect == -1:
-                #testing
                 print("exiting...")
             else: 
-                #print("in the map!!")
                 profileFile = open("profile.txt", "r")
                 for line in profileFile:
                     if line != '\n':
                         u, t, n, m, p = line.split('\t')
                         profile = Profile(u, t, n, m, p)
                         nameToCompare = str(friendWithProfileMap.get(int(profileInputSelect))).replace("{","").replace("}", "").replace("'","")
-
-                        #print("Profile name: " + profile.name)
-                        #print("Name to compare: " + nameToCompare)
                         if (profile.name == nameToCompare):
-                            #print("it is equal")
                             userProfile = profile
                             showProfile1(userProfile)
                 profileFile.close()
+
+    return_to_main_page = ""
+    return_to_main_page = input("Enter exit to return to mainPage")
+    while( return_to_main_page != "exit"):
+        
+        if return_to_main_page == "exit":
+            return
+        else: 
+            return_to_main_page = input("Please enter exit to return to mainPage")
 
             
             
@@ -207,28 +172,23 @@ def set_testprofile():
     for s in student:
         profileFile.write(s + '\t' + "a" + '\t' + "M"
                     +'\t'+"A" + '\t'+"c"+'\n')
-        #profileFile.write()
 
 
 
+def check_if_has_profile(fu):
 
-
-#test()
-#add_to_friendList()
-#set_testprofile()
-friendList1("Student2 Learner2")
-
-
-    
-    
-    	
-
-
-def get_exp():
-    print("")
-
-def get_edu():
-    print("")
+    profileFile = open("profile.txt", "r")
+    for line in profileFile:
+        if line != '\n':
+            u, t, n, m, p = line.split('\t')
+            profile = Profile(u, t, n, m, p)
+            if (profile.name == fu):
+                print("there a profile exist for: " + profile.name)
+                profileExists = True
+            else: print("There's no profile for: " + profile.name
+            )
+    profileFile.close()
+ 
 
 
 
