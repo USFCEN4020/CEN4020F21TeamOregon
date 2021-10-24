@@ -11,7 +11,6 @@ jobList = []
 appliedJobsList = []
 unmarkJobsMap = {}
 countJob = 0
-JobsListName = []
 
 class savedJob:
     def __init__(self, studentName, title):
@@ -278,7 +277,7 @@ def jobSearchPage():
     print("Job Search/ Internship")
     print("------------------------------------")
 
-    check_if_applied_jobs_got_deleted()
+    check_if_applied_jobs_got_deleted(name)
 
 
     #saved all the jobs
@@ -340,35 +339,13 @@ def jobSearchPage():
                     printJob()
         elif b =="a":
             j=0
-           
+            
             while(j!=1):
-                sel = input("Enter the name of the job you want to apply to: ")
-                with open('jobs.txt','r') as f:
-                    lines = f.read().split("\n")
-                    for line in lines:
-                        if name in line:
-                            print("Error, You listed this job as an employer: " + name)
-                            j=1
-                            break
-                    if j == 1:
-                        break
-
-                    for line in lines:
-                        if sel in appliedJobsList: # or word in line.split() to search for full words
-                            print("Error, You have already applied to this job: " + sel)
-                            j=1
-                            break
-                        elif name in line:
-                            print("Error, You listed this job as an employer: " + name)
-                            j=1
-                            break
-                        else:
-                            if (sel in jobList):
-                                displayJob(sel)
-                                jobApplication(sel)
-                                update_appliedJobs()
-                                j=1
-                                break
+                sel = input("Enter the name of the job you want to apply to: ")    
+                if (sel in jobList):
+                    jobApplication(sel)
+                    update_appliedJobs()
+                    j=1
 
 
         elif b == "u":
@@ -425,8 +402,8 @@ def jobSearchPage():
 
     while (a != "0" and a != "1" and a != "2" and a != "3"):
         a = input("Press '0' to return to mainPage," +
-        " '1' to post a new job, '2' to generate list of jobs applied, '7' to DELETE A JOB,  "
-        + "\n'3' to generate list of saved jobs or " + 
+        " '1' to post a new job, '2' to generate list of jobs applied, "
+        + "'3' to generate list of saved jobs or " + 
         " '4' to generate list of jobs that you have not applied yet: ")
         if a == "0":
             mainPage(name)
@@ -439,92 +416,23 @@ def jobSearchPage():
             savedJobListGenerate()
         elif (a == "4"):
             notAppliedJobsListGenerator()
-        elif (a == "7"):
-            deleteJOB()
         else:
             print("Please enter an available option!!\n")
 
-def deleteJOB():
-    print("\n----------JOB DELETION--------")
-    sel = input("Enter the name of the job you want to delete: ")
-    
-    a_file = open("jobs.txt", "r")
-
-
-    lines = a_file.readlines()
-    a_file.close()
-
-    for i in lines:
-        if sel in lines:
-            del lines[i]
-    
-    new_file = open("jobs.txt", "w+")
-    for line in lines:
-        new_file.write(line)
-
-    new_file.close()
-    
-    print("-----JOB Deleted------\n")
-    '''
-    a_file = open("jobs.txt", "r")
-
-    lines = a_file.readlines()
-    a_file.close()
-
-    new_file = open("jobs.txt", "w")
-    for line in lines:
-        if line.strip("\n") != sel:
-            new_file.write(line)
-            break
-        
-    new_file.close()
-    '''
-
-    '''
-    sel = input("Enter the name of the job you want to delete: ")
-    with open("jobs.txt", "r") as f:
-        lines = f.readlines()
-    with open("jobs.txt", "w") as f:
-        for line in lines:
-            if line.strip("\n") == sel:
-                f.write(line)
-                '''
-        
-
-
-def displayJob(title):
-    print("\n----------JOB DESCRIPTION----------")
-    wordList = []
-    
-    with open('jobs.txt','r') as f:
-        lines = f.read().split("\n")
-
-    for line in lines:
-        if title in line: # or word in line.split() to search for full words
-            wordList = line.split("\t")
-            
-    #print(wordList)
-    print("Title: " + wordList[1])
-    print("Description: "+ wordList[2])
-    print("Employer: " + wordList[3])
-    print("Location: " + wordList[4])
-    print("Salary: " + wordList[4])
-    
-
 def jobApplication(title):
 
-    print("\n----------JOB APPLICATION----------")
+    print("----------JOB APPLICATION----------")
   
     g = input("Enter your graduation date Ex:(mm/dd/yyyy): ")
     s = input("Enter the day you can start Ex:(mm/dd/yyyy): ")
     d = input("Describe why you feel fit for the job: ")
-    print("----------APPLICATION SUBMITTED!!!----------\n")
+    
     saveJobApp(name, title, g, s, d)
     
 
 def saveJobApp(name, title, g, s, d):
     file5 = open("appliedJobs.txt", "a")
-    file5.write(str(name) + "\t" + str(title) + "\t"+ str(g)+ "\t"+ str(s)+ "\t"+ str(d)+ "\n" )
+    file5.write(name + "\t" + title + +"\t" + g + "\t" + s + "\t" + d + "\n" )
     file5.close()
     
 
@@ -535,7 +443,7 @@ def job_got_deleted_notification(jobName):
 
 
 #check if applied jobs got deleted
-def check_if_applied_jobs_got_deleted():
+def check_if_applied_jobs_got_deleted(name):
     deletedJobsList = []
     deletedJobsObjList = []
 
@@ -572,13 +480,13 @@ def check_if_applied_jobs_got_deleted():
     #print("list length: " + str(len(deletedJobsList)))
     if len(deletedJobsList) >= 1:
         print("Here are the job(s) You've applied for has(have) been deleted:")
-        print(*deletedJobsList,sep =', ')
+        print(*deletedJobsList,sep = ', ')
             
             
         print("------------------------------------")
 
 
-def appliedJobListGenerate():
+def appliedJobListGenerate(name):
     
     appliedJobsList = []
     #open the applied jobs 
@@ -593,18 +501,12 @@ def appliedJobListGenerate():
     file.close()
 
     print("List of applied jobs:")
-    print(*appliedJobsList, sep = ', ')
+    print(*appliedJobsList, sep=', ')
 
-    a = "x"
-    while a != "0":
-        a = input("Enter '0' to return to job search/ internship page")
-        if a != "0":
-            print("Please enter '0' to return")
-        else: jobSearchPage()
-    
+
     print("------------------------------------")
 
-def notAppliedJobsListGenerator():
+def notAppliedJobsListGenerator(name):
     appliedJobsList = []
     jobList = []
 
@@ -633,17 +535,31 @@ def notAppliedJobsListGenerator():
         if jobList[i] not in appliedJobsList:
             print(str(jobList[i]))
 
-    a = "x"
-    while a != "0":
-        a = input("Enter '0' to return to job search/ internship page")
-        if a != "0":
-            print("Please enter '0' to return")
-        else: jobSearchPage()
     
     print("------------------------------------")
 
 
-def savedJobListGenerate():
+def displayJob(title):
+    i = input("")
+    print("\n----------JOB DESCRIPTION----------")
+    wordList = []
+
+    with open('jobs.txt', 'r') as f:
+        lines = f.read().split("\n")
+
+    for line in lines:
+        if title in line:  # or word in line.split() to search for full words
+            wordList = line.split("\t")
+
+    # print(wordList)
+    print("Title: " + wordList[1])
+    print("Description: " + wordList[2])
+    print("Employer: " + wordList[3])
+    print("Location: " + wordList[4])
+    print("Salary: " + wordList[5])
+
+
+def savedJobListGenerate(name):
     savedJobsList = []
     #open the applied jobs 
     file = open("savedJobs.txt",'r')
@@ -659,25 +575,35 @@ def savedJobListGenerate():
     print("List of saved jobs:")
     print(*savedJobsList, sep = ', ')
 
-    a = "x"
-    while a != "0":
-        a = input("Enter '0' to return to job search/ internship page")
-        if a != "0":
-            print("Please enter '0' to return")
-        else: jobSearchPage()
-    
+        
     print("------------------------------------")
-    
 
+def checkApplyJobs(name):
+    appliedJobsList = []
+    appliedJobsFile = open("appliedJobs.txt",'r')
+    for line in appliedJobsFile:
+        if line != '\n':
+            line = line.rstrip()
+            n, t, start, end, des = line.split('\t')
+            if(n == name):
+                appliedJobsList.append(t)
+
+    appliedJobsFile.close()
+
+    sel = input("Enter the name of the job you want to apply to: ")
+    with open('jobs.txt','r') as f:
+        lines = f.read().split("\n")
+        for line in lines:
+            if sel in appliedJobsList: # or word in line.split() to search for full words
+                print("Error, You have already applied to this job: " + sel)
+                    
+                break
+            elif name in line:
+                print("Error, You listed this job as an employer: " + name)
+                    
+                break
+   
 def pageUnderConstruction():
     print("")
     print("--------------------------------------------------------")
     print("Page under construction")
-
-
-
-
-
-
-
-
