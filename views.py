@@ -357,11 +357,7 @@ def jobSearchPage():
                         if sel in appliedJobsList: # or word in line.split() to search for full words
                             print("Error, You have already applied to this job: " + sel)
                             j=1
-                            break
-                        elif name in line:
-                            print("Error, You listed this job as an employer: " + name)
-                            j=1
-                            break
+                            break                                                             
                         else:
                             if (sel in jobList):
                                 displayJob(sel)
@@ -444,20 +440,41 @@ def jobSearchPage():
         else:
             print("Please enter an available option!!\n")
 
+def job_got_deleted_notification(userName,jobName):
+    appliedJobsGotDeletedFile = open("appliedJobsDeleted.txt",'a')
+    appliedJobsGotDeletedFile.write(userName + '\t' + jobName +'\n')
+    appliedJobsGotDeletedFile.close()
+
 def deleteJOB():
     print("\n----------JOB DELETION--------")
     sel = input("Enter the name of the job you want to delete: ")
     
     a_file = open("jobs.txt", "r")
 
+    localApliedJobsObjList = []
 
     lines = a_file.readlines()
     a_file.close()
 
-    for i in lines:
-        if sel in lines:
-            del lines[i]
-    
+    for i in lines:#sel in lines
+        if sel in i:
+            lines.remove(i)
+            
+            #put deleted jobs in appliedJobs
+            #open the applied jobs, get all the jobs
+            f = open("appliedJobs.txt", 'r')
+            for l in f:
+                if l != '\n':
+                    l = l.rstrip()
+                    n,t, start, end, des = l.split('\t')
+                    # if the title is the same put in the appliedJobsDeleted
+                    if t == sel:
+                        print("deleted")
+                        job_got_deleted_notification(n,t)
+                    
+            #close file
+            f.close()
+
     new_file = open("jobs.txt", "w+")
     for line in lines:
         new_file.write(line)
@@ -465,31 +482,6 @@ def deleteJOB():
     new_file.close()
     
     print("-----JOB Deleted------\n")
-    '''
-    a_file = open("jobs.txt", "r")
-
-    lines = a_file.readlines()
-    a_file.close()
-
-    new_file = open("jobs.txt", "w")
-    for line in lines:
-        if line.strip("\n") != sel:
-            new_file.write(line)
-            break
-        
-    new_file.close()
-    '''
-
-    '''
-    sel = input("Enter the name of the job you want to delete: ")
-    with open("jobs.txt", "r") as f:
-        lines = f.readlines()
-    with open("jobs.txt", "w") as f:
-        for line in lines:
-            if line.strip("\n") == sel:
-                f.write(line)
-                '''
-        
 
 
 def displayJob(title):
@@ -528,10 +520,7 @@ def saveJobApp(name, title, g, s, d):
     file5.close()
     
 
-def job_got_deleted_notification(jobName):
-    appliedJobsGotDeletedFile = open("appliedJobsDeleted.py",'a')
-    appliedJobsGotDeletedFile.write(name + '\t' + jobName +'\n')
-    appliedJobsGotDeletedFile.close()
+
 
 
 #check if applied jobs got deleted
