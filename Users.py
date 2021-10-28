@@ -20,7 +20,7 @@ def home(user):
     a = ""
     login.play_story()
 
-    while a != "exit":
+    while (a != "exit"):
         print("\nPlease type either: 'Login' or 'Register'. You can also press 0 for more options.")
         a = input("What would you like to do: ")
         if (a == "register" or a == "Register"):

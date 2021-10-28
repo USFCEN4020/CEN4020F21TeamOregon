@@ -2,15 +2,14 @@ class Friend:
     def __init__(self, username, friend_username):
         self.username = username
         self.friend_username = friend_username
-
+    
     def __eq__(self, other):
         return self.friend_username == other.friend_username
-
 
 def friendMenu(username):
     global requested_friendList, user
     requested_friendList = []
-
+    
     user = username
     requestFile = open("friend_requested.txt", "r")
     for line in requestFile:
@@ -22,8 +21,8 @@ def friendMenu(username):
 
     show_network(username)
     cmd = ""
-    while (cmd != "0"):
-
+    while(cmd != "0"):
+                
         print("")
         print("------------------------------------------")
         print("| '1' to show your network               |")
@@ -44,38 +43,35 @@ def friendMenu(username):
         else:
             print("Invalid input, please try again")
             print("")
-
+      
         fn = open('friend_requested.txt', 'r+')
         fn.truncate(0)
 
         for rel in requested_friendList:
             requestFileWrite = open("friend_requested.txt", 'a')
-
+            
             requestFileWrite.write(rel.username + '\t' +
-                                   rel.friend_username + '\n')
+                                    rel.friend_username + '\n')
             requestFileWrite.close()
 
-
 def friendList(username):
-    open("friendList.txt", "r")
-
-    friends = []
-
+    open("friendList.txt","r")
+       
+    friends= []
+    
     print(friends)
 
     for i in range(len(friends)):
         if hasProfile(friends[i]):
             print(friends[i] + "profile")
-        else:
-            print(friends[i])
-
+        else: print(friends[i])
+    
     userInput = input("enter the friend name with profile to see profile")
-
+    
     for i in range(len(friends)):
-        if userInput == friends[i]:
+        if userInput == friends[i]: 
             showProfile(friends[i])
-        else:
-            print(friends[i] + "does not have profile yet")
+        else: print(friends[i] + "does not have profile yet")
 
 
 def showProfile(username):
@@ -83,74 +79,72 @@ def showProfile(username):
 
 
 def hasProfile(username):
-    if hasProfile == True:
+    if hasProfile == True: 
         return True
-    else:
-        return False
-
+    else: return False
 
 def addFriends(username):
     keep = "y"
-    while (keep == "y" or keep == "Y"):
+    while(keep == "y" or keep == "Y"):
         search_by = input("Would you like to search students by lastname, university, or major? ")
-
-        if (search_by == "lastname" or search_by == "Lastname"):
+        
+        if(search_by == "lastname" or search_by == "Lastname"):
             input_last = input("What is the last name you would like to search? ")
-
-            if (has_user_last(input_last)):
-                request = input("User with that last name exists. Would you like to send friend request?(y/n) ")
-                if (request == 'y'):
+                        
+            if(has_user_last(input_last)):
+                request = input("User with that last name exists. Would you like to send friend request?(y/n) ")                    
+                if(request == 'y'):
                     temp = Friend(username, last_username)
                     requested_friendList.append(temp)
                     print("Friend request has been sent")
                     keep = input("Would you like to continue search?(y/n) ")
-
-                elif (request == 'n'):
+                    
+                elif(request == 'n'):
                     print("You've decided not to send friend request\n")
                     keep = input("Would you like to continue search?(y/n) ")
-
+                    
                 else:
                     print("You will be able to search by lastname, university or major only.")
                     keep = input("Would you like to continue search?(y/n) ")
-
+                    
             else:
                 print("No user with that last name found")
                 keep = input("Would you like to continue search?(y/n) ")
 
-        elif (search_by == "university" or search_by == "University"):
+        elif(search_by == "university" or search_by == "University"):
             input_uni = input("What is the university you would like to search? ")
 
-            if (has_user_uni(input_uni)):
-                request = input("User with that university exists. Would you like to send friend request?(y/n) ")
-                if (request == 'y'):
+            if(has_user_uni(input_uni)):
+                request = input("User with that university exists. Would you like to send friend request?(y/n) ")                    
+                if(request == 'y'):
                     temp = Friend(username, uni_username)
                     requested_friendList.append(temp)
                     print("Friend request has been sent")
                     keep = input("Would you like to continue search?(y/n) ")
-
-                elif (request == 'n'):
+                    
+                elif(request == 'n'):
                     print("You've decided not to send friend request\n")
                     keep = input("Would you like to continue search?(y/n) ")
-
+                    
                 else:
                     print("You will be able to search by lastname, university or major only.")
                     keep = input("Would you like to continue search?(y/n) ")
 
-        elif (search_by == "major" or search_by == "Major"):
+        elif(search_by == "major" or search_by == "Major"):
             input_maj = input("What is the major you would like to search? ")
 
-            if (has_user_maj(input_maj)):
-                request = input("User with that major exists. Would you like to send friend request?(y/n) ")
-                if (request == 'y'):
+            if(has_user_maj(input_maj)):
+                request = input("User with that major exists. Would you like to send friend request?(y/n) ")                    
+                if(request == 'y'):
                     temp = Friend(username, maj_username)
                     requested_friendList.append(temp)
                     print("Friend request has been sent")
                     keep = input("Would you like to continue search?(y/n) ")
-
-                elif (request == 'n'):
+                    
+                elif(request == 'n'):
                     print("You've decided not to send friend request\n")
                     keep = input("Would you like to continue search?(y/n) ")
-
+                    
                 else:
                     print("You will be able to search by lastname, university or major only.")
                     keep = input("Would you like to continue search?(y/n) ")
@@ -158,43 +152,39 @@ def addFriends(username):
             print("Invalid input")
             keep = input("Would you like to continue search?(y/n) ")
 
-
 def has_user_last(input_last):
     global last_username
     for line in open("profile.txt", "r"):
         if line != '\n':
             u, t, m, n, a = line.split('\t')
-
-            first, last = u.split(' ')
-            if (last == input_last and u != user):
+            
+            first, last= u.split(' ')
+            if(last == input_last and u != user):
                 last_username = u
                 return True
     return False
-
 
 def has_user_uni(input_uni):
     global uni_username
     for line in open("profile.txt", "r"):
         if line != '\n':
             u, t, m, n, a = line.split('\t')
-
-            if (n == input_uni + ' ' and u != user):
+            
+            if(n == input_uni+' ' and u != user):
                 uni_username = u
                 return True
     return False
-
 
 def has_user_maj(input_maj):
     global maj_username
     for line in open("profile.txt", "r"):
         if line != '\n':
             u, t, m, n, a = line.split('\t')
-
-            if (m == input_maj + ' ' and u != user):
+            
+            if(m == input_maj + ' ' and u != user):
                 maj_username = u
                 return True
     return False
-
 
 def show_network(username):
     count_pending = 0
@@ -206,9 +196,9 @@ def show_network(username):
             if (u == username):
                 count_pending += 1
                 print("Waiting friend reuqest response from: " + fu)
-    requestFile.close()
+    requestFile.close()  
 
-    if (count_pending == 0):
+    if(count_pending == 0):
         print("No pending friend requests")
 
     count_friend = 0
@@ -219,14 +209,13 @@ def show_network(username):
             u, fu = line.split('\t')
             if (u == username or fu == username + '\n'):
                 count_friend += 1
-                if (u == username):
+                if(u == username):
                     print("Friend username: " + fu)
                 else:
                     print("Friend username: " + u)
-    friendFile.close()
-    if (count_friend == 0):
+    friendFile.close()    
+    if(count_friend == 0):
         print("No friend to show")
-
 
 def disconnect_network(username):
     print("Your friends:\n")
@@ -234,20 +223,20 @@ def disconnect_network(username):
     for line in friendFile:
         if line != '\n':
             u, fu = line.split('\t')
-
+            
             if (u == username or fu == username + '\n'):
-                if (u == username):
+                if(u == username):
                     print("Friend username: " + fu)
                 else:
                     print("Friend username: " + u)
-    friendFile.close()
+    friendFile.close() 
 
     aFile = open("friendList.txt", "r")
     lines = aFile.readlines()
     aFile.close()
 
     delete = input("Which user would you like to be disconnected? ")
-    if (has_delete_user(delete, username) == False):
+    if(has_delete_user(delete, username) == False):
         print("The user is not friend with you")
         return
 
@@ -255,55 +244,55 @@ def disconnect_network(username):
     for line in lines:
         if line != '\n':
             u, fu = line.split('\t')
-            if (u == username and fu == delete + '\n'):
-
+            if (u == username and fu == delete +'\n'):
+                
                 print(fu + " has been disconnected from your friend list ")
                 break
-            elif (u == delete and fu == username + '\n'):
-
+            elif(u == delete and fu == username + '\n'):
+                
                 print(u + " has been disconnected from your friend list ")
                 break
             else:
                 wFile.write(line)
-    wFile.close()
-
+    wFile.close() 
+    
 
 def has_delete_user(delete, username):
     friendFile = open("friendList.txt", "r")
     for line in friendFile:
         if line != '\n':
             u, fu = line.split('\t')
-            if (u == username and fu == delete + '\n'):
+            if (u == username and  fu == delete + '\n'):
                 return True
-            elif (u == delete and fu == username + '\n'):
-                return True
-    friendFile.close()
-    return False
-
+            elif(u == delete and fu == username + '\n'):
+                return True             
+    friendFile.close() 
+    return False  
 
 def has_pending_requests(username):
+    
     aFile = open("friend_requested.txt", "r")
     lines = aFile.readlines()
     aFile.close()
 
-    wFile = open("friend_requested.txt", "w")
+    wFile = open("friend_requested.txt", "w")    
     for line in lines:
         if line != '\n':
             u, fu = line.split('\t')
-
-            if (fu == username + '\n'):
+            
+            if(fu == username + '\n'):
                 print("You have pending friend requests from " + u)
                 decision = input("Would you like to accept or reject the request? ")
-                if (decision == "accept" or decision == "Accept"):
+                if(decision == "accept" or decision == "Accept"):
                     friendFileWrite = open("friendList.txt", 'a')
-
+            
                     friendFileWrite.write(u + '\t' +
-                                          username + '\n')
+                                    username + '\n')
                     friendFileWrite.close()
-
+                    
                     print("Friend request has been successfully accepted")
-                elif (decision == "reject" or decision == "Reject"):
-
+                elif(decision == "reject" or decision == "Reject"):
+                    
                     print("Friend request has been successfully rejected")
             else:
                 wFile.write(line)
