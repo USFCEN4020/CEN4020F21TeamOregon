@@ -6,6 +6,7 @@ import testBaseEpic6
 input_values = []
 print_values = []
 
+
 def test_save_jobs():
     jobs = open("jobs.txt", "r").readlines()
     savedJobs = open("savedJobs.txt", "r").readlines()
@@ -313,14 +314,14 @@ def test_applied_jobs_got_deleted():
     fr = open("appliedJobsDeleted.txt", "w")
     fr.write("Student Learner\tSoftware Engineer\n")
     fr.close()
-    
+
     testBaseEpic6.check_if_applied_jobs_got_deleted("Student Learner")
 
     output = get_display_output()
 
     assert output == ["Here are the job(s) You've applied for has(have) been deleted:",
-                        "Software Engineer",
-                        "------------------------------------"]
+                      "Software Engineer",
+                      "------------------------------------"]
 
 
 def test_has_max_jobs():
@@ -329,7 +330,7 @@ def test_has_max_jobs():
 
     isTrue = False
 
-    for i in range(1,11):
+    for i in range(1, 11):
         file.write("${i}\n")
     file.close()
     isTrue = views.has_max_jobs()
@@ -340,6 +341,7 @@ def test_has_max_jobs():
     file1.close()
 
     assert isTrue
+
 
 def test_appliedjoblist():
     print_values.clear()
@@ -353,13 +355,14 @@ def test_appliedjoblist():
 
     assert output == ["List of applied jobs:", "worker", "------------------------------------"]
 
+
 def test_notappliedjoblist():
     print_values.clear()
     appliedJobs = open("appliedJobs.txt", "w")
     appliedJobs.write("Student Learner\tworker\tstart date\tendate\tdes")
     appliedJobs.close()
 
-    jobs = open("jobs.txt","w")
+    jobs = open("jobs.txt", "w")
     jobs.write("Student Learner2\tengineering worker\tD\tE\tL\tS")
     jobs.close()
 
@@ -367,7 +370,9 @@ def test_notappliedjoblist():
 
     output = get_display_output()
 
-    assert output == ["List of jobs that has been applied to:", "engineering worker", "------------------------------------"]
+    assert output == ["List of jobs that has been applied to:", "engineering worker",
+                      "------------------------------------"]
+
 
 def test_savedjoblist():
     print_values.clear()
@@ -381,6 +386,7 @@ def test_savedjoblist():
 
     assert output == ["List of saved jobs:", "saved worker", "------------------------------------"]
 
+
 def test_applypostedjobs():
     postedJobs = open("jobs.txt", "w")
     postedJobs.write("Student Learner\tworker\tD\tE\tL\tS")
@@ -392,7 +398,8 @@ def test_applypostedjobs():
     output = get_display_output()
 
     assert output == ["Enter the name of the job you want to apply to: ",
-                        "Error, You listed this job as an employer: Student Learner" ]
+                      "Error, You listed this job as an employer: Student Learner"]
+
 
 def test_applyappliedjobs():
     appliedJobs = open("appliedJobs.txt", "w")
@@ -405,7 +412,8 @@ def test_applyappliedjobs():
     output = get_display_output()
 
     assert output == ["Enter the name of the job you want to apply to: ",
-                        "Error, You have already applied to this job: worker" ]
+                      "Error, You have already applied to this job: worker"]
+
 
 def test_deletejobs():
     Jobs = open("jobs.txt", "w")

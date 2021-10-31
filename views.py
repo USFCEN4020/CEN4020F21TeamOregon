@@ -3,6 +3,7 @@ import usefulLinks
 import profile
 import friend
 import friendList
+import mailbox
 
 savedJobsMap = {}
 savedJobsList = []
@@ -45,9 +46,16 @@ def mainPage(nameofuser):
         print("| '5' to go to your profile         |")
         print("| '6' to show your network          |")
         print("| '7' to show your friendList       |")
+        print("| '8' to enter you mailbox          |")
         print("| '0' to return to login            |")
         print("-------------------------------------")
+        if "++" not in name:
+            print("| '++' to become a PLUS member      |")
+            print("-------------------------------------")
         print("")
+        if messageNotification(name):
+            print("You have new messages in your inbox.\n")
+
         kbInput = input("Enter page you want to go to: ")
 
         if (kbInput == '1'):
@@ -64,10 +72,30 @@ def mainPage(nameofuser):
             friend.friendMenu(name)
         elif (kbInput == '7'):
             friendList.friendList1(name)
+        elif(kbInput == "8"):
+            mailbox.mailboxMenu(name)
+        elif (kbInput == "++"):
+            registerPlusUser(name)
         elif (kbInput == '0'):
             return
         else:
             print("Please enter an available option!!\n")
+
+
+#checks for new messages
+def messageNotification(username):
+    nameFile = open("mailboxDataBase.txt", "r")
+    new_message = nameFile.readlines()
+    nameFile.close()
+
+    t = "TO:: " + username
+    f = "*"
+
+    for line in new_message:
+        if t in line and f in line:
+            return True
+
+    return False
 
 
 def postNewJob():
@@ -451,8 +479,6 @@ def deleteJOB():
     
     a_file = open("jobs.txt", "r")
 
-    localApliedJobsObjList = []
-
     lines = a_file.readlines()
     a_file.close()
 
@@ -657,6 +683,30 @@ def savedJobListGenerate():
     
     print("------------------------------------")
     
+def registerPlusUser(name):
+    
+    NewLines =[]
+    opn = open("accounts.txt", "r")
+    lines = opn.readlines()
+    opn.close()
+                        
+    newName = name + "++"
+    for line in lines:
+        newline = line.replace(name, newName)
+        NewLines.append(newline)
+            
+    clos = open("accounts.txt", "w+")
+    for line in NewLines:
+        clos.write(line)
+    
+    name = name + "++"
+    clos.close()
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+ Congratulations!! you have registerd as a plus user +")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    mainPage(name)
+
+
 
 def pageUnderConstruction():
     print("")
