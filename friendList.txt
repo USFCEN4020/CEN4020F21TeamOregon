@@ -1,11 +1,1 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-Student2 Learner2	Student Learner
-Guy GG++	BR LA
-=======
-Student2 Learner2	Student Learner
-Guy GG++	BR LA
->>>>>>> 01e0dd580b9ff03e89554c4702bf78f28c1e8677
-=======
 Student Learner	Student2 Learner2
->>>>>>> 7d225df52989ca2ccb45bd94398bc7c947730072
