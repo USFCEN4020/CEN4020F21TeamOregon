@@ -1,4 +1,3 @@
-#
 class Friend:
     def __init__(self, username, friend_username):
         self.username = username
