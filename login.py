@@ -2,7 +2,7 @@ from validatePass import validatePass
 from views import mainPage
 import notifications
 import random
-
+#from Users import output_users
 
 def login(user):
     print("--------------------------")
@@ -129,6 +129,7 @@ def register():
     file2.close()
     file3.close()
 
+    output_users()
     nameofuser = Fname + " " + Lname
     
     print("\nHello, " + Fname)
@@ -233,3 +234,15 @@ def find_contacts(n):
         if n in f.read():
             return True
         return False
+
+
+def output_users():
+    aFile = open("accounts.txt", "r")
+    lines = aFile.readlines()
+    aFile.close()
+
+    wFile = open("MyCollege_users.txt", "w")
+    for line in lines:
+        if line != '\n':
+            wFile.write(line)
+    wFile.close()

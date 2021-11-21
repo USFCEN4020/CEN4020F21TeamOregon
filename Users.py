@@ -6,6 +6,8 @@ from validatePass import validatePass
 import login
 import importantLinks
 import training
+import outputApi
+import epic10
 
 class User:
 
@@ -17,6 +19,15 @@ class User:
 
 
 def home(user):
+    epic10.newJobsAPI()
+    epic10.studentAccountAPI()
+    epic10.trainingAPI()
+    outputApi.output_jobs()
+    outputApi.output_userProfiles()
+    outputApi.output_users()
+    outputApi.output_training()
+    outputApi.output_savedJobs()
+    
     a = ""
     login.play_story()
 

@@ -7,7 +7,10 @@ import friendList
 import mailbox
 import notifications
 import learning
-
+import epic10
+from itertools import groupby
+#from Users import output_jobs
+#from Users import output_savedJobs
 savedJobsMap = {}
 savedJobsList = []
 savedJobsListObj = []
@@ -24,6 +27,33 @@ class savedJob:
     
     def __eq__(self,other):
         return self.studentName == other.studentName and self.title == other.title
+
+
+def output_savedJobs():
+    wFile = open("MyCollege_savedJobs.txt", "w")
+    with open("savedJobs.txt") as f:
+        lines = ((line.split(None, 1)[:1], line) for line in f if line.strip())
+
+        for k, g in groupby(lines, lambda L: L[0]):
+            lines = [el[1] for el in g]
+            lines.sort()
+            for li in lines:
+                wFile.write(li + '\n')
+            wFile.write("=====" + '\n')
+    wFile.close()
+
+
+def output_jobs():
+    aFile = open("jobs.txt", "r")
+    lines = aFile.readlines()
+    aFile.close()
+
+    wFile = open("MyCollege_jobs.txt", "w")
+    for line in lines:
+        if line != '\n':
+            wFile.write(line)
+            wFile.write("=====" + '\n')
+    wFile.close()
 
 
 def mainPage(nameofuser):
@@ -153,6 +183,8 @@ def createNewJob():
     salary = input("Enter the salary for your job: ")
 
     saveJob(name, title, description, employer, location, salary)
+    epic10.post_appliedJobsAPI(title)
+    output_jobs()
     newJobPosted(name, title)
     print("\nyour job has been saved")
     mainPage(name)
@@ -398,6 +430,7 @@ def jobSearchPage():
                         file.write(obj.studentName + "\t" + obj.title + "\n")
                     
                     file.close()
+                    output_savedJobs()
                     print("Job saved!!!")
                     #update_jobs_appliedJobs_and_savedJobs()
                     printJob()
@@ -471,6 +504,7 @@ def jobSearchPage():
                         file.write(obj.studentName + "\t" + obj.title + "\n")
                         
                     file.close()
+                    output_savedJobs()
                     print("Job unmarked!!!")
 
                     #some not necessary though. 
@@ -488,8 +522,8 @@ def jobSearchPage():
         + "\n'3' to generate list of saved jobs or " + 
         " '4' to generate list of jobs that you have not applied yet: ")
         if a == "0":
-            mainPage(name)
-            #return
+            #mainPage(name)
+            return
         elif (a == "1"):
             postNewJob()
         elif (a == "2"):
@@ -530,6 +564,7 @@ def deleteJOB():
                     n,t, start, end, des, e = l.split('\t')
                     # if the title is the same put in the appliedJobsDeleted
                     if t == sel:
+                        epic10.delete_appliedJobsAPI(t)
                         print("deleted")
                         job_got_deleted_notification(n,t)
                     
@@ -542,6 +577,8 @@ def deleteJOB():
 
     new_file.close()
     
+    output_jobs()
+
     print("-----JOB Deleted------\n")
 
 
@@ -578,6 +615,7 @@ def jobApplication(title):
     
 
 def saveJobApp(name, title, g, s, d, dateApplied):
+    epic10.apply_appliedJobsAPI(title,name,d)
     file5 = open("appliedJobs.txt", "a")
     file5.write(str(name) + "\t" + str(title) + "\t"+ str(g)+ "\t"+ str(s)+ "\t"+ str(d)+ "\t" + str(dateApplied)+"\n" )
     file5.close()

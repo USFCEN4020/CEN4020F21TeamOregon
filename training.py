@@ -1,6 +1,10 @@
+from os import path
 import login
+from os.path import exists
 
 def training_menu():
+    path_to_file = "newtraining.txt"
+    optionCounterList = []
     cmd = ""
     while (cmd != '0'):
         print("")
@@ -14,6 +18,18 @@ def training_menu():
         print("| '2' to go to 'IT Help Desk'                       |")
         print("| '3' to go to 'Business Analysis and Strategy'     |")
         print("| '4' to go to 'Security'                           |")
+        
+        
+        f = open("training.txt",'r')
+        counter =  5
+        for line in f:
+            if line != '\n':
+                line = line.rstrip()
+                optionCounterList.append(counter)
+                print("| '" + str(counter) +"' to go to '" + line + "'             |")
+                counter+= 1
+        f.close()
+
         print("| '0' to return to main page                        |")
         print("-----------------------------------------------------")
         cmd = input("What would you like to do: ")
@@ -26,6 +42,9 @@ def training_menu():
             BusinessAnalysis()
         elif (cmd == '4'):
             comingSoon()
+        elif cmd.isdigit():
+            if( int(cmd) in optionCounterList):
+                comingSoon()
         else:
             print("Invalid input, please try again")
             print("")
